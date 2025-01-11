@@ -1,0 +1,48 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "runClient",
+      "request": "launch",
+      "mainClass": "net.minecraftforge.legacydev.MainClient",
+      "projectName": "ModularWarfare",
+      "cwd": "${workspaceFolder}\\run",
+      "vmArgs": "-Dforge.logging.console.level\u003ddebug -Dforge.logging.markers\u003dSCAN,REGISTRIES,REGISTRYDUMP -Dnet.minecraftforge.gradle.GradleStart.srg.srg-mcp\u003dC:\\Users\\Артик\\Documents\\GitHub\\ModularWarfare-Ultimate\\build\\createSrgToMcp\\output.srg -Dmixin.env.remapRefMap\u003dtrue -Dmixin.env.refMapRemappingFile\u003dC:\\Users\\Артик\\Documents\\GitHub\\ModularWarfare-Ultimate\\build\\createSrgToMcp\\output.srg -Dfml.coreMods.load\u003dcom.modularwarfare.mixin.MixinCore -Dmixin.debug\u003dtrue",
+      "args": "",
+      "env": {
+        "MCP_TO_SRG": "C:\\Users\\Артик\\Documents\\GitHub\\ModularWarfare-Ultimate\\build\\createSrgToMcp\\output.srg",
+        "MOD_CLASSES": "${workspaceFolder}\\bin\\main;${workspaceFolder}\\bin\\main",
+        "mainClass": "net.minecraft.launchwrapper.Launch",
+        "MCP_MAPPINGS": "snapshot_20171003-1.12",
+        "FORGE_VERSION": "14.23.5.2855",
+        "assetIndex": "1.12",
+        "assetDirectory": "C:\\Users\\Артик\\.gradle\\caches\\forge_gradle\\assets",
+        "nativesDirectory": "${workspaceFolder}\\build\\natives",
+        "FORGE_GROUP": "net.minecraftforge",
+        "tweakClass": "net.minecraftforge.fml.common.launcher.FMLTweaker",
+        "MC_VERSION": "${MC_VERSION}"
+      }
+    },
+    {
+      "type": "java",
+      "name": "runServer",
+      "request": "launch",
+      "mainClass": "net.minecraftforge.legacydev.MainServer",
+      "projectName": "ModularWarfare",
+      "cwd": "${workspaceFolder}\\run",
+      "vmArgs": "-Dforge.logging.console.level\u003ddebug -Dforge.logging.markers\u003dSCAN,REGISTRIES,REGISTRYDUMP -Dnet.minecraftforge.gradle.GradleStart.srg.srg-mcp\u003dC:\\Users\\Артик\\Documents\\GitHub\\ModularWarfare-Ultimate\\build\\createSrgToMcp\\output.srg -Dmixin.env.remapRefMap\u003dtrue -Dmixin.env.refMapRemappingFile\u003dC:\\Users\\Артик\\Documents\\GitHub\\ModularWarfare-Ultimate\\build\\createSrgToMcp\\output.srg",
+      "args": "",
+      "env": {
+        "MCP_TO_SRG": "C:\\Users\\Артик\\Documents\\GitHub\\ModularWarfare-Ultimate\\build\\createSrgToMcp\\output.srg",
+        "MOD_CLASSES": "${workspaceFolder}\\bin\\main;${workspaceFolder}\\bin\\main",
+        "mainClass": "net.minecraft.launchwrapper.Launch",
+        "MCP_MAPPINGS": "snapshot_20171003-1.12",
+        "FORGE_VERSION": "14.23.5.2855",
+        "FORGE_GROUP": "net.minecraftforge",
+        "tweakClass": "net.minecraftforge.fml.common.launcher.FMLServerTweaker",
+        "MC_VERSION": "${MC_VERSION}"
+      }
+    }
+  ]
+}

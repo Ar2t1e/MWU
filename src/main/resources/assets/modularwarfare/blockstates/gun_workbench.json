@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "modularwarfare:gun_workbench", "y": 0 },
+    "facing=south": { "model": "modularwarfare:gun_workbench", "y": 180 },
+    "facing=east": { "model": "modularwarfare:gun_workbench", "y": 90 },
+    "facing=west": { "model": "modularwarfare:gun_workbench", "y": -90 }
+  }
+}
