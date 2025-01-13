@@ -5,8 +5,6 @@ import com.modularwarfare.ModularWarfare;
 import com.modularwarfare.api.RenderHandSleeveEventEnhanced;
 import com.modularwarfare.client.ClientProxy;
 import com.modularwarfare.client.ClientRenderHooks;
-import com.modularwarfare.client.fpp.basic.configs.AttachmentRenderConfig;
-import com.modularwarfare.client.gui.GuiAttachmentModified;
 import com.modularwarfare.client.model.ModelAttachment;
 import com.modularwarfare.client.fpp.basic.models.objects.CustomItemRenderType;
 import com.modularwarfare.client.fpp.basic.models.objects.CustomItemRenderer;
@@ -30,10 +28,7 @@ import com.modularwarfare.common.textures.TextureType;
 import com.modularwarfare.loader.api.model.ObjModelRenderer;
 import com.modularwarfare.utility.OptifineHelper;
 import com.modularwarfare.utility.ReloadHelper;
-import com.modularwarfare.utility.RenderHelperMW;
 import com.modularwarfare.utility.maths.Interpolation;
-
-import de.javagl.jgltf.model.NodeModel;
 
 import mchhui.hegltf.DataNode;
 import mchhui.hegltf.GltfRenderModel;
@@ -53,14 +48,12 @@ import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.BossInfo;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -70,7 +63,6 @@ import net.optifine.shaders.Shaders;
 import org.joml.Quaternionf;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.Color;
 import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
@@ -433,15 +425,13 @@ public class RenderGunEnhanced extends CustomItemRenderer {
 
         HashSet<String> exceptPartsRendering=exceptParts;
 
-//        model.updateAnimation(controller.getTime(),true);
-
         /**
          * RIGHT HAND GROUP
          * */
 
         final ItemAttachment sightRendering=sight;
 
-        boolean glowMode=ObjModelRenderer.glowTxtureMode;
+        boolean glowMode = ObjModelRenderer.glowTxtureMode;
         ObjModelRenderer.glowTxtureMode=true;
         blendTransform(model,item, !config.animations.containsKey(AnimationType.SPRINT), controller.getTime(), controller.getSprintTime(),(float)controller.SPRINT, "sprint_righthand", applySprint, true, () -> {
             if(isRenderHand0) {
@@ -459,53 +449,25 @@ public class RenderGunEnhanced extends CustomItemRenderer {
                 /**
                  * player right hand
                  * */
-                if(Minecraft.getMinecraft().currentScreen instanceof GuiAttachmentModified) {
-                    controller.attachmentMode = true;
-                    GL11.glTranslatef(config.attachmentMode.attachmentRightArmTranslate.x * controller.GetAtachModeProgress(), config.attachmentMode.attachmentRightArmTranslate.y * controller.GetAtachModeProgress(), config.attachmentMode.attachmentRightArmTranslate.z * controller.GetAtachModeProgress());
-                    GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.x * controller.GetAtachModeProgress(), 1, 0, 0);
-                    GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.y * controller.GetAtachModeProgress(), 0, 1, 0);
-                    GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.z * controller.GetAtachModeProgress(), 0, 0, 1);
-
-                    {
-                        if (gunType.handsTextureType != null) {
-                            bindCustomHands(gunType.handsTextureType);
-                        } else {
-                            bindPlayerSkin();
-                        }
-                        if(!Minecraft.getMinecraft().player.getSkinType().equals("slim")) {
-                            model.renderPart(RIGHT_HAND_PART);
-                            model.applyGlobalTransformToOther("rightArmModel", () -> {
-                                renderRightArm(player, renderplayer.getMainModel(),config);
-                            });
-                        }else {
-                            model.renderPart(RIGHT_SLIM_HAND_PART);
-                            model.applyGlobalTransformToOther("rightArmSlimModel", () -> {
-                                renderRightArm(player, renderplayer.getMainModel(),config);
-                            });
-                        }
-                    }
+                GL11.glTranslatef(config.attachmentMode.attachmentRightArmTranslate.x * controller.getAttachmentProgress(), config.attachmentMode.attachmentRightArmTranslate.y * controller.getAttachmentProgress(), config.attachmentMode.attachmentRightArmTranslate.z * controller.getAttachmentProgress());
+                GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.x * controller.getAttachmentProgress(), 1, 0, 0);
+                GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.y * controller.getAttachmentProgress(), 0, 1, 0);
+                GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.z * controller.getAttachmentProgress(), 0, 0, 1);
+                if(gunType.handsTextureType != null){
+                    bindCustomHands(gunType.handsTextureType);
+                } else {
+                    bindPlayerSkin();
+                }
+                if(!Minecraft.getMinecraft().player.getSkinType().equals("slim")) {
+                    model.renderPart(RIGHT_HAND_PART);
+                    model.applyGlobalTransformToOther("rightArmModel", () -> {
+                        renderRightArm(player, renderplayer.getMainModel(),config);
+                    });
                 }else {
-                    controller.attachmentMode = false;
-                    GL11.glTranslatef(config.attachmentMode.attachmentRightArmTranslate.x * controller.GetAtachModeProgress(), config.attachmentMode.attachmentRightArmTranslate.y * controller.GetAtachModeProgress(), config.attachmentMode.attachmentRightArmTranslate.z * controller.GetAtachModeProgress());
-                    GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.x * controller.GetAtachModeProgress(), 1, 0, 0);
-                    GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.y * controller.GetAtachModeProgress(), 0, 1, 0);
-                    GL11.glRotatef(config.attachmentMode.attachmentRightArmRotate.z * controller.GetAtachModeProgress(), 0, 0, 1);
-                    if(gunType.handsTextureType != null){
-                        bindCustomHands(gunType.handsTextureType);
-                    } else {
-                        bindPlayerSkin();
-                    }
-                    if(!Minecraft.getMinecraft().player.getSkinType().equals("slim")) {
-                        model.renderPart(RIGHT_HAND_PART);
-                        model.applyGlobalTransformToOther("rightArmModel", () -> {
-                            renderRightArm(player, renderplayer.getMainModel(),config);
-                        });
-                    }else {
-                        model.renderPart(RIGHT_SLIM_HAND_PART);
-                        model.applyGlobalTransformToOther("rightArmSlimModel", () -> {
-                            renderRightArm(player, renderplayer.getMainModel(),config);
-                        });
-                    }
+                    model.renderPart(RIGHT_SLIM_HAND_PART);
+                    model.applyGlobalTransformToOther("rightArmSlimModel", () -> {
+                        renderRightArm(player, renderplayer.getMainModel(),config);
+                    });
                 }
                 ObjModelRenderer.glowTxtureMode=true;
 
@@ -919,53 +881,24 @@ public class RenderGunEnhanced extends CustomItemRenderer {
                 /**
                  * player left hand
                  * */
-                if(Minecraft.getMinecraft().currentScreen instanceof GuiAttachmentModified) {
-                    controller.attachmentMode = true;
-                    controller.INSPECT = 1;
-                    controller.INSPECT_EMPTY = 1;
-                    controller.DRAW = 1;
-                    GL11.glTranslatef(config.attachmentMode.attachmentLeftArmTranslate.x * controller.GetAtachModeProgress(), config.attachmentMode.attachmentLeftArmTranslate.y * controller.GetAtachModeProgress(), config.attachmentMode.attachmentLeftArmTranslate.z*  controller.GetAtachModeProgress());
-                    GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.x * controller.GetAtachModeProgress(), 1, 0, 0);
-                    GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.y * controller.GetAtachModeProgress(), 0, 1, 0);
-                    GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.z * controller.GetAtachModeProgress(), 0, 0, 1);
-
-                    if (gunType.handsTextureType != null) {
-                        bindCustomHands(gunType.handsTextureType);
-                    } else {
-                        bindPlayerSkin();
-                    }
-                    if (!Minecraft.getMinecraft().player.getSkinType().equals("slim")) {
-                        model.renderPart(LEFT_HAND_PART);
-                        model.applyGlobalTransformToOther("leftArmModel", () -> {
-                            renderLeftArm(player, renderplayer.getMainModel(), config);
-                        });
-                    } else {
-                        model.renderPart(LEFT_SLIM_HAND_PART);
-                        model.applyGlobalTransformToOther("leftArmSlimModel", () -> {
-                            renderLeftArm(player, renderplayer.getMainModel(), config);
-                        });
-                    }
-                }else {
-                    controller.attachmentMode = false;
-                    GL11.glTranslatef(config.attachmentMode.attachmentLeftArmTranslate.x * controller.GetAtachModeProgress(), config.attachmentMode.attachmentLeftArmTranslate.y * controller.GetAtachModeProgress(), config.attachmentMode.attachmentLeftArmTranslate.z*  controller.GetAtachModeProgress());
-                    GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.x * controller.GetAtachModeProgress(), 1, 0, 0);
-                    GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.y * controller.GetAtachModeProgress(), 0, 1, 0);
-                    GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.z * controller.GetAtachModeProgress(), 0, 0, 1);
-                    if (gunType.handsTextureType != null) {
-                        bindCustomHands(gunType.handsTextureType);
-                    } else {
-                        bindPlayerSkin();
-                    }if (!Minecraft.getMinecraft().player.getSkinType().equals("slim")) {
-                        model.renderPart(LEFT_HAND_PART);
-                        model.applyGlobalTransformToOther("leftArmModel", () -> {
-                            renderLeftArm(player, renderplayer.getMainModel(), config);
-                        });
-                    } else {
-                        model.renderPart(LEFT_SLIM_HAND_PART);
-                        model.applyGlobalTransformToOther("leftArmSlimModel", () -> {
-                            renderLeftArm(player, renderplayer.getMainModel(), config);
-                        });
-                    }
+                GL11.glTranslatef(config.attachmentMode.attachmentLeftArmTranslate.x * controller.getAttachmentProgress(), config.attachmentMode.attachmentLeftArmTranslate.y * controller.getAttachmentProgress(), config.attachmentMode.attachmentLeftArmTranslate.z*  controller.getAttachmentProgress());
+                GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.x * controller.getAttachmentProgress(), 1, 0, 0);
+                GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.y * controller.getAttachmentProgress(), 0, 1, 0);
+                GL11.glRotatef(config.attachmentMode.attachmentLeftArmRotate.z * controller.getAttachmentProgress(), 0, 0, 1);
+                if (gunType.handsTextureType != null) {
+                    bindCustomHands(gunType.handsTextureType);
+                } else {
+                    bindPlayerSkin();
+                }if (!Minecraft.getMinecraft().player.getSkinType().equals("slim")) {
+                    model.renderPart(LEFT_HAND_PART);
+                    model.applyGlobalTransformToOther("leftArmModel", () -> {
+                        renderLeftArm(player, renderplayer.getMainModel(), config);
+                    });
+                } else {
+                    model.renderPart(LEFT_SLIM_HAND_PART);
+                    model.applyGlobalTransformToOther("leftArmSlimModel", () -> {
+                        renderLeftArm(player, renderplayer.getMainModel(), config);
+                    });
                 }
             }
         });
